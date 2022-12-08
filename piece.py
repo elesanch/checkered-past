@@ -6,7 +6,7 @@ Created on Tue Dec  6 15:34:48 2022
 @author: elenasanchez
 """
 import pygame
-from constants import WHITE, RED, SQUARE_SIZE, GREY
+from constants import SQUARE_SIZE, GREY, CROWN
 
 class Piece: 
     PADDING = 15
@@ -16,16 +16,11 @@ class Piece:
         self.row = row
         self.col = col 
         self.color = color 
-        self.king = False 
-        # if self.color == RED:
-        #     self.direction = -1 # going up
-        # else: 
-        #     self.direction = 1 # moving down    
-        
+        self.king = False  
         self.x = 0 
         self.y = 0 
-        
         self.calc_pos()
+
     def calc_pos(self): 
         # this is to ge the center of square and be able to draw the piece from the center 
         self.x = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
@@ -40,6 +35,13 @@ class Piece:
         # first draw "outline" as big circle and then do the smaller circle on top of it 
         pygame.draw.circle(win, GREY, (self.x, self.y), radius + self.OUTLINE)
         pygame.draw.circle(win,self.color, (self.x, self.y),radius)
+        
+        # adding the crown to center of king pieces
+        if self.king: 
+            win.blit(CROWN,(self.x - CROWN.get_width()//2, self.y - CROWN.get_height()//2))
     
-    # def __repr__(self):
-    #     return str(self.color)
+    def move (self, row, col):
+        self.row = row 
+        self.col = col
+        self.calc_pos()
+        
