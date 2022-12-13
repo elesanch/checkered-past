@@ -55,7 +55,7 @@ def main_menu():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.user_input(menu_mouse_pos):
-                    main()
+                    play(mode = 0)
                 if mode_button.user_input(menu_mouse_pos):
                     game_mode()
                 if options_button.user_input(menu_mouse_pos):
@@ -67,11 +67,11 @@ def main_menu():
 
         pygame.display.update()
         
-def main():
-    pygame.display.set_caption ('Checkers - Game')
+def play(mode):
+    pygame.display.set_caption ('Normal Mode - Press Space Bar for Main Menu')
     run = True 
     clock = pygame.time.Clock()
-    game = Game(WIN)
+    game = Game(WIN, mode)
     board = Board()
     
     while run: 
@@ -101,63 +101,63 @@ def main():
     pygame.quit()
 
 def game_mode():
-    pygame.display.set_caption('Game Mode Selection')
+    pygame.display.set_caption('Game Mode - Press Space Bar for Main Menu')
     run = True 
     clock = pygame.time.Clock()
-    font = pygame.font.SysFont("couriernew", 50)
     button_face = pygame.image.load("button.jpg")
     button_face = pygame.transform.scale(button_face, (600, 150))  
     
     while run: 
         clock.tick(FPS)
         WIN.fill("black")
-        # mode_text = font.render("This Screen Isn't Finished", True, "white")
-        # mode_rect = mode_text.get_rect(center=(400, 100))
-        # WIN.blit(mode_text, mode_rect)
         mode_mouse_pos = pygame.mouse.get_pos()
-        instr_button = Button(button_face, pos=(400, 150), text_input = "INSTRUCTION MODE", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
-        norm_button = Button(button_face, pos=(400, 300), text_input = "NORMAL MODE", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
-        timed_button = Button(button_face, pos=(400, 450), text_input = "TIMED MODE", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
+        instr_button = Button(button_face, pos=(400, 150), text_input = "INSTRUCTION MODE", font = pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
+        norm_button = Button(button_face, pos=(400, 300), text_input = "NORMAL MODE", font = pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
+        timed_button = Button(button_face, pos=(400, 450), text_input = "TIMED MODE", font = pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
            
         for selection in [instr_button, norm_button, timed_button]:
             selection.color_change(mode_mouse_pos)
             selection.update(WIN)
-            
+        
+        
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if instr_button.user_input(mode_mouse_pos):
+                    play(mode = 1)
+                if norm_button.user_input(mode_mouse_pos):
+                    play(mode = 0)
+                if timed_button.user_input(mode_mouse_pos):
+                    play(mode = 0)
+                    
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 sys.exit()
-            
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     main_menu()
-        
+
         pygame.display.update()
 
 def options():
-    pygame.display.set_caption('Adjust Game Settings')
+    pygame.display.set_caption('Settings - Press Space Bar for Main Menu')
     run = True 
     clock = pygame.time.Clock()
-    font = pygame.font.SysFont("couriernew", 50)
     button_face = pygame.image.load("button.jpg")
     button_face = pygame.transform.scale(button_face, (600, 150))  
     
     while run: 
         clock.tick(FPS)
         WIN.fill("black")
-        # options_text = font.render("This Screen Isn't Finished", True, "white")
-        # options_rect = options_text.get_rect(center=(400, 400))
-        # WIN.blit(options_text, options_rect)
         opt_mouse_pos = pygame.mouse.get_pos()
-        music_button = Button(button_face, pos=(400, 150), text_input = "MUSIC VOLUME", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
-        board_button = Button(button_face, pos=(400, 300), text_input = "BOARD COLOR", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
-
+        music_button = Button(button_face, pos=(400, 300), text_input = "MUSIC VOLUME", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
+        board_button = Button(button_face, pos=(400, 500), text_input = "BOARD COLOR", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
            
         for selection in [music_button, board_button]:
             selection.color_change(opt_mouse_pos)
             selection.update(WIN)
-            
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -168,6 +168,6 @@ def options():
                     main_menu()
             
         pygame.display.update()
+ 
 ##############################################################################
 main_menu()
-# main()
