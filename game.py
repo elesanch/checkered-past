@@ -10,12 +10,13 @@ from constants import RED, WHITE, BLUE, SQUARE_SIZE
 from board import Board
 
 class Game: 
-    def __init__(self, win):
+    def __init__(self, win, mode):
         self.selected_piece = None
         self.board = Board()
         self.turn = RED
         self.valid_moves = {}
         self.win = win 
+        self.mode = mode 
     
     def update(self): 
         self.board.draw(self.win)
@@ -68,8 +69,11 @@ class Game:
         
         return True 
     
+    #Instructional mode showing the possible moves 
     def draw_pos_moves(self, moves):
-        for move in moves: 
-            row, col = move
-            pygame.draw.circle(self.win, BLUE, (col *SQUARE_SIZE + SQUARE_SIZE//2, row*SQUARE_SIZE + SQUARE_SIZE//2), 15)
-    
+        if self.mode == 1: 
+            for move in moves: 
+                row, col = move
+                pygame.draw.circle(self.win, BLUE, (col *SQUARE_SIZE + SQUARE_SIZE//2, row*SQUARE_SIZE + SQUARE_SIZE//2), 15)
+        else: 
+            pass
