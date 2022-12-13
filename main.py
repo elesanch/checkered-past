@@ -78,32 +78,42 @@ def instructions():
           WIN.fill("black")
           titleRect = pygame.draw.rect(WIN, BLACK, (100, 100, 100, 100))
           font_title = pygame.font.Font('freesansbold.ttf', 32)
-          text = font_title.render('Instructions', True, WHITE)
+          text = font_title.render('Instructions:', True, WHITE)
           WIN.blit(text, titleRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 150, 100, 100))
           font_title = pygame.font.Font('freesansbold.ttf', 24)
-          ins = font_title.render('You are allowed to move diagonally by one space.', True, WHITE)
+          ins = font_title.render('Start by clicking on the piece you want to move.', True, WHITE)
           WIN.blit(ins, textRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 200, 100, 100))
-          ins = font_title.render('Capture all pieces by jumping others to win! ', True, WHITE)
+          font_title = pygame.font.Font('freesansbold.ttf', 24)
+          ins = font_title.render('Then click on the space you would like to move to.', True, WHITE)
           WIN.blit(ins, textRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 250, 100, 100))
-          ins = font_title.render('Once you make it to the opposite side,', True, WHITE)
+          font_title = pygame.font.Font('freesansbold.ttf', 24)
+          ins = font_title.render('You are allowed to move diagonally by one space.', True, WHITE)
           WIN.blit(ins, textRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 300, 100, 100))
-          ins = font_title.render('your piece will become a king and you can move back.', True, WHITE)
+          ins = font_title.render('Capture all pieces by jumping others to win! ', True, WHITE)
           WIN.blit(ins, textRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 350, 100, 100))
-          ins = font_title.render('RED STARTS' , True, RED)
+          ins = font_title.render('Once you make it to the opposite side,', True, WHITE)
           WIN.blit(ins, textRect)
           
           textRect = pygame.draw.rect(WIN, BLACK, (100, 400, 100, 100))
-          ins = font_title.render('Press ENTER to continue', True, WHITE)
+          ins = font_title.render('your piece will become a king and you can move back.', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 550, 100, 100))
+          ins = font_title.render('RED STARTS' , True, RED)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 600, 100, 100))
+          ins = font_title.render('Press RETURN to continue', True, WHITE)
           WIN.blit(ins, textRect)
           
           for event in pygame.event.get():
