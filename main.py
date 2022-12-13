@@ -7,7 +7,7 @@ Created on Tue Dec  6 14:07:02 2022
 """
 import pygame
 import sys 
-from constants import WIDTH, HEIGHT, SQUARE_SIZE
+from constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, BLACK, WHITE
 from board import Board 
 from game import Game
 from button import Button
@@ -15,6 +15,7 @@ from button import Button
 FPS = 60
 pygame.init()
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
 
 def get_pos_mouse(position): 
     x, y = position
@@ -55,7 +56,8 @@ def main_menu():
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.user_input(menu_mouse_pos):
-                    play(mode = 0)
+                    instructions()
+                    # play(mode = 0)
                 if mode_button.user_input(menu_mouse_pos):
                     game_mode()
                 if options_button.user_input(menu_mouse_pos):
@@ -67,20 +69,67 @@ def main_menu():
 
         pygame.display.update()
         
+def instructions(): 
+      pygame.display.set_caption ('Normal Mode - Press Enter to Continue')
+      run = True 
+      clock = pygame.time.Clock()
+      while run: 
+          clock.tick(FPS)
+          WIN.fill("black")
+          titleRect = pygame.draw.rect(WIN, BLACK, (100, 100, 100, 100))
+          font_title = pygame.font.Font('freesansbold.ttf', 32)
+          text = font_title.render('Instructions', True, WHITE)
+          WIN.blit(text, titleRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 150, 100, 100))
+          font_title = pygame.font.Font('freesansbold.ttf', 24)
+          ins = font_title.render('You are allowed to move diagonally by one space.', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 200, 100, 100))
+          ins = font_title.render('Capture all pieces by jumping others to win! ', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 250, 100, 100))
+          ins = font_title.render('Once you make it to the opposite side,', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 300, 100, 100))
+          ins = font_title.render('your piece will become a king and you can move back.', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 350, 100, 100))
+          ins = font_title.render('RED STARTS' , True, RED)
+          WIN.blit(ins, textRect)
+          
+          textRect = pygame.draw.rect(WIN, BLACK, (100, 400, 100, 100))
+          ins = font_title.render('Press ENTER to continue', True, WHITE)
+          WIN.blit(ins, textRect)
+          
+          for event in pygame.event.get():
+              if event.type == pygame.QUIT:
+                  run = False
+                  pygame.quit()
+                  sys.exit()
+              if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    main_menu()
+                if event.key == pygame.K_RETURN:
+                    play(mode = 0)
+          
+          pygame.display.update()
+      
 def play(mode):
     pygame.display.set_caption ('Normal Mode - Press Space Bar for Main Menu')
     run = True 
     clock = pygame.time.Clock()
+    
     game = Game(WIN, mode)
-    board = Board()
     
     while run: 
         clock.tick(FPS)
         WIN.fill("black")
         
-        if board.winner() != None: 
-            print(board.winner())
-            
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -168,6 +217,7 @@ def options():
                     main_menu()
             
         pygame.display.update()
- 
+
+
 ##############################################################################
 main_menu()
