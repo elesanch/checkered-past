@@ -5,7 +5,7 @@ Created on Tue Dec  6 14:36:16 2022
 
 @author: elenasanchez
 """
-
+import pygame
 WIDTH, HEIGHT = 800,800 
 
 ROWS, COLS = 8, 8 # standard board
