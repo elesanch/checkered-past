@@ -7,7 +7,7 @@ Created on Tue Dec  6 14:07:02 2022
 """
 import pygame
 import sys 
-from constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, BLACK, WHITE
+from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE
 from board import Board 
 from game import Game
 from button import Button
@@ -36,7 +36,7 @@ def main_menu():
         clock.tick(FPS)
         board = Board()
         menu_mouse_pos = pygame.mouse.get_pos()
-        play_button = Button(button_face, pos=(400, 150), text_input = "PLAY", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
+        play_button = Button(button_face, pos=(400, 150), text_input = "QUICK PLAY", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
         mode_button = Button(button_face, pos=(400, 300), text_input = "GAME MODE", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
         options_button = Button(button_face, pos=(400, 450), text_input = "OPTIONS", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
         exit_button = Button(button_face, pos=(400, 600), text_input = "EXIT", font=pygame.font.SysFont("couriernew", 50), base_color="black", hovering_color="red")
@@ -69,66 +69,39 @@ def main_menu():
 
         pygame.display.update()
         
-def instructions(): 
-      pygame.display.set_caption ('Normal Mode - Press Enter to Continue')
-      run = True 
-      clock = pygame.time.Clock()
-      while run: 
-          clock.tick(FPS)
-          WIN.fill("black")
-          titleRect = pygame.draw.rect(WIN, BLACK, (100, 100, 100, 100))
-          font_title = pygame.font.Font('freesansbold.ttf', 32)
-          text = font_title.render('Instructions:', True, WHITE)
-          WIN.blit(text, titleRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 150, 100, 100))
-          font_title = pygame.font.Font('freesansbold.ttf', 24)
-          ins = font_title.render('Start by clicking on the piece you want to move.', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 200, 100, 100))
-          font_title = pygame.font.Font('freesansbold.ttf', 24)
-          ins = font_title.render('Then click on the space you would like to move to.', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 250, 100, 100))
-          font_title = pygame.font.Font('freesansbold.ttf', 24)
-          ins = font_title.render('You are allowed to move diagonally by one space.', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 300, 100, 100))
-          ins = font_title.render('Capture all pieces by jumping others to win! ', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 350, 100, 100))
-          ins = font_title.render('Once you make it to the opposite side,', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 400, 100, 100))
-          ins = font_title.render('your piece will become a king and you can move back.', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 550, 100, 100))
-          ins = font_title.render('RED STARTS' , True, RED)
-          WIN.blit(ins, textRect)
-          
-          textRect = pygame.draw.rect(WIN, BLACK, (100, 600, 100, 100))
-          ins = font_title.render('Press RETURN to continue', True, WHITE)
-          WIN.blit(ins, textRect)
-          
-          for event in pygame.event.get():
-              if event.type == pygame.QUIT:
-                  run = False
-                  pygame.quit()
-                  sys.exit()
-              if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    main_menu()
-                if event.key == pygame.K_RETURN:
-                    play(mode = 0)
-          
-          pygame.display.update()
-      
+
+
+def instructions():
+    pygame.display.set_caption ('Normal Mode - Press Enter to Continue')
+    run = True 
+    clock = pygame.time.Clock()
+    WIN.fill("black")
+    instructions = [line.strip('\n')
+                    for line in open('Instructions.txt', 'r').readlines()]
+
+    font = pygame.font.Font("freesansbold.ttf", 16)
+    for n, line in enumerate(instructions):
+        text = font.render(line, 1, WHITE)
+        text_rect = text.get_rect()
+        text_rect.left = 100
+        text_rect.centery = n*50 + 50
+        WIN.blit(text, text_rect)
+    
+    while run: 
+        clock.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+              if event.key == pygame.K_SPACE:
+                  main_menu()
+              if event.key == pygame.K_RETURN:
+                  play(mode = 0)
+        
+        pygame.display.update()
+
 def play(mode):
     pygame.display.set_caption ('Normal Mode - Press Space Bar for Main Menu')
     run = True 
@@ -227,7 +200,6 @@ def options():
                     main_menu()
             
         pygame.display.update()
-
 
 ##############################################################################
 main_menu()
