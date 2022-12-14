@@ -1,0 +1,12 @@
+Instructions: 
+1. Select the piece you would like to move
+2. Choose the place you would like to move to
+
+Rules: 
+1. You are only allowed to move diagonally one space at a time (unless jumping)
+2. Once the piece reaches the end, it will become a king
+3. Kings can move horizontally in any direction. 
+4. Capture all opponent pieces to win! 
+5. RED Starts 
+
+Press RETURN to start the game
