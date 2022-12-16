@@ -10,9 +10,9 @@ from constants import RED, WHITE, BLUE, SQUARE_SIZE
 from board import Board
 
 class Game: 
-    def __init__(self, win, mode):
+    def __init__(self, win, mode, color1, color2):
         self.selected_piece = None
-        self.board = Board()
+        self.board = Board(color1, color2)
         self.turn = RED
         self.valid_moves = {}
         self.win = win 
@@ -77,3 +77,11 @@ class Game:
                 pygame.draw.circle(self.win, BLUE, (col *SQUARE_SIZE + SQUARE_SIZE//2, row*SQUARE_SIZE + SQUARE_SIZE//2), 15)
         else: 
             pass
+    
+    def winner(self): 
+        if self.board.red_left <=12: 
+            return print(WHITE)
+        elif self.board.white_left <= 12: 
+            return print(RED)
+        
+        return None 
