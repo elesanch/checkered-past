@@ -10,17 +10,19 @@ from constants import BLACK, ROWS, COLS, RED, SQUARE_SIZE, WHITE
 from piece import Piece
 
 class Board: 
-    def __init__(self): 
+    def __init__(self, color1, color2): 
         self.board = [] # list of lists of pieces on the board (8 by 8)
         self.red_left = self.white_left = 12
         self.red_kings = self.white_kings = 0
+        self.color1 = color1
+        self.color2 = color2
         self.create_board()
         
-    def draw_squares(self, win):
-        win.fill(BLACK)
+    def draw_squares(self, win, color1, color2):
+        win.fill(color1)
         for row in range(ROWS): 
             for col in range (row % 2, COLS, 2):
-                pygame.draw.rect(win, RED, (col*SQUARE_SIZE, row*SQUARE_SIZE, 
+                pygame.draw.rect(win, color2, (col*SQUARE_SIZE, row*SQUARE_SIZE, 
                                             SQUARE_SIZE, SQUARE_SIZE) ) # rectangle draw func 
     def create_board(self):
         for row in range(ROWS):
@@ -38,7 +40,7 @@ class Board:
         return self.board
     
     def draw(self, win):
-        self.draw_squares(win)
+        self.draw_squares(win, self.color1, self.color2)
         for row in range(ROWS):
             for col in range(COLS):
                 piece = self.board[row][col]
@@ -150,7 +152,7 @@ class Board:
                 
             right += 1
         return moves
-    
+
     def remove(self, pieces): 
        for piece in pieces: 
            self.board[piece.row][piece.col]= 0
@@ -159,11 +161,3 @@ class Board:
                    self.red_left -= 1
                else: 
                    self.white_left -= 1
-                         
-    def winner(self): 
-        if self.red_left <=0: 
-            return WHITE
-        elif self.white_left <= 0: 
-            return RED
-        
-        return None    
