@@ -7,7 +7,7 @@ Created on Tue Dec  6 14:07:02 2022
 """
 import sys
 import pygame
-from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE
+from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE, RED, BLACK
 from board import Board
 from game import Game
 from button import Button
@@ -34,7 +34,7 @@ def main_menu():
 
     while run:
         clock.tick(FPS)
-        board = Board()
+        # board = Board(color1, color2)
         menu_mouse_pos = pygame.mouse.get_pos()
         play_button = Button(button_face, pos = (400, 150), text_input = "QUICK PLAY",
                              font = pygame.font.SysFont("couriernew", 50),
@@ -53,8 +53,6 @@ def main_menu():
             selection.color_change(menu_mouse_pos)
             selection.update(WIN)
 
-        if board.winner() != None:
-            print(board.winner())
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -65,7 +63,6 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.user_input(menu_mouse_pos):
                     instructions()
-                    # play(mode = 0)
                 if mode_button.user_input(menu_mouse_pos):
                     game_mode()
                 if options_button.user_input(menu_mouse_pos):
@@ -105,16 +102,15 @@ def instructions():
                 if event.key == pygame.K_SPACE:
                     main_menu()
                 if event.key == pygame.K_RETURN:
-                    play(mode = 0)
+                    play(mode = 0, color1 = BLACK, color2= RED)
 
         pygame.display.update()
 
-def play(mode):
+def play(mode, color1, color2):
     pygame.display.set_caption ('Game - Press Space Bar for Main Menu')
     run = True
     clock = pygame.time.Clock()
-
-    game = Game(WIN, mode)
+    game = Game(WIN, mode, color1, color2)
 
     while run:
         clock.tick(FPS)
@@ -134,9 +130,13 @@ def play(mode):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     main_menu()
-
+        
+        # if game.winner() != None:
+        #     print(game.winner())
+        #     pygame.quit()
+            
         game.update()
-
+        
     pygame.quit()
 
 def game_mode():
@@ -168,11 +168,11 @@ def game_mode():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if instr_button.user_input(mode_mouse_pos):
-                    play(mode = 1)
+                    play(mode = 1, color1 = BLACK, color2 = RED)
                 if norm_button.user_input(mode_mouse_pos):
-                    play(mode = 0)
+                    play(mode = 0, color1 = BLACK, color2 = RED)
                 if timed_button.user_input(mode_mouse_pos):
-                    play(mode = 0)
+                    play(mode = 0, color1 = BLACK, color2 = RED)
 
             if event.type == pygame.QUIT:
                 run = False
@@ -208,6 +208,9 @@ def options():
             selection.update(WIN)
 
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if board_button.user_input(opt_mouse_pos):
+                    board_selection()
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
@@ -218,5 +221,41 @@ def options():
 
         pygame.display.update()
 
+def board_selection(): 
+    pygame.display.set_caption('Settings - Press Space Bar for Main Menu')
+    run = True
+    clock = pygame.time.Clock()
+    button_face = pygame.image.load("button.jpg")
+    button_face = pygame.transform.scale(button_face, (600, 150))
+    while run:
+        clock.tick(FPS)
+        WIN.fill("black")
+        opt_mouse_pos = pygame.mouse.get_pos()
+        bw_button = Button(button_face, pos=(400, 300), text_input = "Black/White Board",
+                              font=pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        br_button = Button(button_face, pos=(400, 500), text_input = "Black/Red Board",
+                              font=pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+
+        for selection in [bw_button, br_button]:
+            selection.color_change(opt_mouse_pos)
+            selection.update(WIN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if bw_button.user_input(opt_mouse_pos):
+                    play(mode = 0, color1 = BLACK, color2 = WHITE)
+                if br_button.user_input(opt_mouse_pos):
+                    play(mode = 0, color1 = BLACK, color2 = RED)
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    main_menu()
+
+        pygame.display.update()
 ##############################################################################
 main_menu()
