@@ -22,7 +22,7 @@ class Piece:
         self.calc_pos()
 
     def calc_pos(self): 
-        # this is to ge the center of square and be able to draw the piece from the center 
+        # this is to get the center of square and be able to draw the piece from the center 
         self.x = SQUARE_SIZE * self.col + SQUARE_SIZE // 2
         self.y = SQUARE_SIZE * self.row + SQUARE_SIZE // 2
     
@@ -30,7 +30,7 @@ class Piece:
         self.king = True
     
     def draw(self, win): 
-        radius = SQUARE_SIZE //2 - self.PADDING
+        radius = SQUARE_SIZE // 2 - self.PADDING
         
         # first draw "outline" as big circle and then do the smaller circle on top of it 
         pygame.draw.circle(win, GREY, (self.x, self.y), radius + self.OUTLINE)
@@ -38,8 +38,8 @@ class Piece:
         
         # adding the crown to center of king pieces
         if self.king: 
-            win.blit(CROWN,(self.x - CROWN.get_width()//2, self.y - CROWN.get_height()//2))
-    
+            win.blit(CROWN,(self.x - CROWN.get_width() // 2, self.y - CROWN.get_height() // 2))
+            
     def move (self, row, col):
         self.row = row 
         self.col = col

@@ -8,6 +8,11 @@ Created on Tue Dec  6 15:01:32 2022
 import pygame 
 from constants import BLACK, ROWS, COLS, RED, SQUARE_SIZE, WHITE
 from piece import Piece
+from pygame import mixer
+
+mixer.init()
+king_fx = pygame.mixer.Sound("sounds/king.wav")
+king_fx.set_volume(0.75)
 
 class Board: 
     def __init__(self, color1, color2): 
@@ -57,6 +62,7 @@ class Board:
         # This makes kings if the piece touches the first or last row AFTER a move
         if row == ROWS - 1 or row == 0: 
             piece.make_king()
+            king_fx.play()
             if piece.color == WHITE: 
                 self.white_kings += 1 
             elif piece.color == RED: 

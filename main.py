@@ -7,15 +7,10 @@ Created on Tue Dec  6 14:07:02 2022
 """
 import sys
 import pygame
-from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE, RED, BLACK
-from board import Board
+from pygame import mixer
+from constants import WIDTH, HEIGHT, SQUARE_SIZE, WHITE, RED, BLACK, GREY, BLUE
 from game import Game
 from button import Button
-
-FPS = 60
-pygame.init()
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-
 
 def get_pos_mouse(position):
     x, y = position
@@ -34,7 +29,6 @@ def main_menu():
 
     while run:
         clock.tick(FPS)
-        # board = Board(color1, color2)
         menu_mouse_pos = pygame.mouse.get_pos()
         play_button = Button(button_face, pos = (400, 150), text_input = "QUICK PLAY",
                              font = pygame.font.SysFont("couriernew", 50),
@@ -62,19 +56,92 @@ def main_menu():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.user_input(menu_mouse_pos):
+                    button_click_fx.play()
                     instructions()
                 if mode_button.user_input(menu_mouse_pos):
+                    button_click_fx.play()
                     game_mode()
                 if options_button.user_input(menu_mouse_pos):
+                    button_click_fx.play()
                     options()
                 if exit_button.user_input(menu_mouse_pos):
+                    button_click_fx.play()
                     run = False
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
 
+def end_game(winner):
+    pygame.display.set_caption("Game Over")
+    button_face = pygame.image.load("button.jpg")
+    button_face = pygame.transform.scale(button_face, (400, 150))
+    clock = pygame.time.Clock()
+    font = pygame.font.SysFont("couriernew", 50)
+    run = True
+    WIN.fill("black")
+    
+    if winner == True:
+        text = font.render("WHITE WINS!", True, WHITE)
+        text_rect = text.get_rect()
+        text_rect.centerx = 400
+        text_rect.centery = 150
+        WIN.blit(text, text_rect)
+        win_fx.play()
 
+    if winner == False:
+        text = font.render("RED WINS!", True, WHITE)
+        text_rect = text.get_rect()
+        text_rect.centerx = 400
+        text_rect.centery = 150
+        WIN.blit(text, text_rect)
+        win_fx.play()
+    
+    if winner != True and winner != False:
+        text = font.render("YOU'RE OUT OF TIME!", True, WHITE)
+        text_rect = text.get_rect()
+        text_rect.centerx = 400
+        text_rect.centery = 150
+        WIN.blit(text, text_rect)
+        end_fx.play()
+        
+    while run:
+        clock.tick(FPS)
+        end_mouse_pos = pygame.mouse.get_pos()
+        menu_button = Button(button_face, pos = (400, 300), text_input = "MAIN MENU",
+                             font = pygame.font.SysFont("couriernew", 50),
+                             base_color = "black", hovering_color = "red")
+        exit_button = Button(button_face, pos = (400, 450), text_input = "EXIT",
+                             font = pygame.font.SysFont("couriernew", 50),
+                             base_color = "black",hovering_color = "red")
+        
+        for selection in [menu_button, exit_button]:
+            selection.color_change(end_mouse_pos)
+            selection.update(WIN)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if menu_button.user_input(end_mouse_pos):
+                    button_click_fx.play()
+                    main_menu()
+                if exit_button.user_input(end_mouse_pos):
+                    button_click_fx.play()
+                    run = False
+                    pygame.quit()
+                    sys.exit()
+                    
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
+                    main_menu()
+
+        pygame.display.update()
+        
 def instructions():
     pygame.display.set_caption ('Press Enter to Continue')
     run = True
@@ -88,7 +155,7 @@ def instructions():
         text = font.render(line, 1, WHITE)
         text_rect = text.get_rect()
         text_rect.left = 100
-        text_rect.centery = n*50 + 50
+        text_rect.centery = n * 50 + 50
         WIN.blit(text, text_rect)
 
     while run:
@@ -100,8 +167,10 @@ def instructions():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
                     main_menu()
                 if event.key == pygame.K_RETURN:
+                    button_click_fx.play()
                     play(mode = 0, color1 = BLACK, color2= RED)
 
         pygame.display.update()
@@ -109,34 +178,208 @@ def instructions():
 def play(mode, color1, color2):
     pygame.display.set_caption ('Game - Press Space Bar for Main Menu')
     run = True
+    WIN.fill("black")
     clock = pygame.time.Clock()
     game = Game(WIN, mode, color1, color2)
-
-    while run:
-        clock.tick(FPS)
-        WIN.fill("black")
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                row, col = get_pos_mouse(pos)
-                game.select(row,col)
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    main_menu()
+    font_1 = pygame.font.SysFont("couriernew", 40)
+    font_2 = pygame.font.SysFont("couriernew", 12)
+    countdown = 0
+    last_count = pygame.time.get_ticks()
+    
+    if mode == 0 or mode == 1:
+        countdown = 0
+        while run:
+            clock.tick(FPS)
+            if countdown == 0:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                        pygame.quit()
+                        sys.exit()
         
-        # if game.winner() != None:
-        #     print(game.winner())
-        #     pygame.quit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        row, col = get_pos_mouse(pos)
+                        game.select(row,col)
+     
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            back_click_fx.play()
+                            main_menu()
+                        
+                    if game.winner() == True:
+                        end_game(True)
+                    
+                    if game.winner()== False:
+                        end_game(False)
+            game.update()
+
+    if mode == 2:
+        countdown = 60
+        while run:
+            clock.tick(FPS)
+            if countdown > 0:
+                draw_timer(str(countdown), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                count_timer = pygame.time.get_ticks()
+                if count_timer - last_count > 1000:
+                    countdown -= 1
+                    last_count = count_timer
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                        pygame.quit()
+                        sys.exit()
+        
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        row, col = get_pos_mouse(pos)
+                        game.select(row,col)
+        
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            back_click_fx.play()
+                            main_menu()
+
+                    if game.winner() == True:
+                        end_game(True)
+                            
+                    if game.winner()== False:
+                        end_game(False)
+
+            if countdown == 0:
+                draw_timer(str(0), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                pygame.time.delay(500)
+                WIN.fill(BLACK)
+                end_game(game.winner())
             
-        game.update()
+            game.update()
+            
+    if mode == 3:
+        countdown = 120
+        while run:
+            clock.tick(FPS)
+            if countdown > 0:
+                draw_timer(str(countdown), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                count_timer = pygame.time.get_ticks()
+                if count_timer - last_count > 1000:
+                    countdown -= 1
+                    last_count = count_timer
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                        pygame.quit()
+                        sys.exit()
         
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        row, col = get_pos_mouse(pos)
+                        game.select(row,col)
+        
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            back_click_fx.play()
+                            main_menu()  
+                            
+                    if game.winner() == True:
+                        end_game(True)
+                    
+                    if game.winner()== False:
+                        end_game(False)
+
+            if countdown == 0:
+                draw_timer(str(0), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                pygame.time.delay(500)
+                WIN.fill(BLACK)
+                end_game(game.winner())
+            
+            game.update()
+
+    if mode == 4:
+        countdown = 3000
+        while run:
+            clock.tick(FPS)
+            if countdown > 0:
+                draw_timer(str(countdown), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                count_timer = pygame.time.get_ticks()
+                if count_timer - last_count > 1000:
+                    countdown -= 1
+                    last_count = count_timer
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                        pygame.quit()
+                        sys.exit()
+        
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        row, col = get_pos_mouse(pos)
+                        game.select(row,col)
+        
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            back_click_fx.play()
+                            main_menu()     
+
+            if countdown == 0:
+                draw_timer(str(0), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                pygame.time.delay(500)
+                WIN.fill(BLACK)
+                end_game(game.winner())
+            
+            game.update()
+            
+    if mode == 5:
+        countdown = 6000
+        while run:
+            clock.tick(FPS)
+            if countdown > 0:
+                draw_timer(str(countdown), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                count_timer = pygame.time.get_ticks()
+                if count_timer - last_count > 1000:
+                    countdown -= 1
+                    last_count = count_timer
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                        pygame.quit()
+                        sys.exit()
+        
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        pos = pygame.mouse.get_pos()
+                        row, col = get_pos_mouse(pos)
+                        game.select(row,col)
+        
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            back_click_fx()
+                            main_menu()   
+
+                    if game.winner() == True:
+                        end_game(True)
+                    
+                    if game.winner()== False:
+                        end_game(False)
+
+            if countdown == 0:
+                draw_timer(str(0), font_1, WHITE, 50, 33)
+                draw_timer("Seconds Left", font_2, WHITE, 50, 66)
+                pygame.time.delay(500)
+                WIN.fill(BLACK)
+                end_game(game.winner())
+            
+            game.update()
+
     pygame.quit()
 
 def game_mode():
@@ -145,7 +388,7 @@ def game_mode():
     clock = pygame.time.Clock()
     button_face = pygame.image.load("button.jpg")
     button_face = pygame.transform.scale(button_face, (600, 150))
-
+    
     while run:
         clock.tick(FPS)
         WIN.fill("black")
@@ -168,11 +411,22 @@ def game_mode():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if instr_button.user_input(mode_mouse_pos):
+                    button_click_fx.play()
                     play(mode = 1, color1 = BLACK, color2 = RED)
+                    # if board_selection() != None:
+                    #     play(mode = 1, color1 = board_selection()[0], color2 = board_selection()[1])
+                    # else:
+                    #     play(mode = 1, color1 = BLACK, color2 = RED)
                 if norm_button.user_input(mode_mouse_pos):
+                    button_click_fx.play()
                     play(mode = 0, color1 = BLACK, color2 = RED)
+                    # if board_selection() != None:
+                    #     play(mode = 0, color1 = board_selection()[0], color2 = board_selection()[1])
+                    # else:
+                    #     play(mode = 0, color1 = BLACK, color2 = RED)  
                 if timed_button.user_input(mode_mouse_pos):
-                    play(mode = 0, color1 = BLACK, color2 = RED)
+                    button_click_fx.play()
+                    timer_selection()
 
             if event.type == pygame.QUIT:
                 run = False
@@ -181,10 +435,74 @@ def game_mode():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
                     main_menu()
 
         pygame.display.update()
 
+def timer_selection():
+    pygame.display.set_caption('Timer Selection - Press Space Bar for Main Menu')
+    run = True
+    clock = pygame.time.Clock()
+    button_face = pygame.image.load("button.jpg")
+    button_face = pygame.transform.scale(button_face, (600, 150))
+
+    while run:
+        clock.tick(FPS)
+        WIN.fill("black")
+        timed_mouse_pos = pygame.mouse.get_pos()
+        min_button = Button(button_face, pos=(400, 150), text_input = "1-Minute",
+                              font = pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        two_min_button = Button(button_face, pos=(400, 300), text_input = "2-Minutes",
+                             font = pygame.font.SysFont("couriernew", 50),
+                             base_color="black", hovering_color="red")
+        five_min_button = Button(button_face, pos=(400, 450), text_input = "5-Minutes",
+                              font = pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        ten_min_button = Button(button_face, pos=(400, 600), text_input = "10-Minutes",
+                              font = pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        
+        for selection in [min_button, two_min_button, five_min_button, ten_min_button]:
+            selection.color_change(timed_mouse_pos)
+            selection.update(WIN)
+    
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if min_button.user_input(timed_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 2, color1 = BLACK, color2 = RED)
+                if two_min_button.user_input(timed_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 3, color1 = BLACK, color2 = RED)
+                if five_min_button.user_input(timed_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 4, color1 = BLACK, color2 = RED)
+                if ten_min_button.user_input(timed_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 5, color1 = BLACK, color2 = RED)
+
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
+                    main_menu()
+
+        pygame.display.update()
+
+def draw_timer(text, font, color, x_pos, y_pos):
+    timer_image = font.render(text, True, color)
+    timer_image_rect = timer_image.get_rect()
+    timer_image_rect.centerx = x_pos
+    timer_image_rect.centery = y_pos
+    WIN.blit(timer_image, timer_image_rect)
+    pygame.display.update()
+    
 def options():
     pygame.display.set_caption('Settings - Press Space Bar for Main Menu')
     run = True
@@ -210,13 +528,21 @@ def options():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if board_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
                     board_selection()
+
+                if board_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
+                    # need to define music function/screen
+                    
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
                     main_menu()
 
         pygame.display.update()
@@ -231,31 +557,79 @@ def board_selection():
         clock.tick(FPS)
         WIN.fill("black")
         opt_mouse_pos = pygame.mouse.get_pos()
+        br_button = Button(button_face, pos=(400, 150), text_input = "Black/Red Board",
+                              font=pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
         bw_button = Button(button_face, pos=(400, 300), text_input = "Black/White Board",
                               font=pygame.font.SysFont("couriernew", 50),
                               base_color="black", hovering_color="red")
-        br_button = Button(button_face, pos=(400, 500), text_input = "Black/Red Board",
+        bg_button = Button(button_face, pos=(400, 450), text_input = "Black/Grey Board",
                               font=pygame.font.SysFont("couriernew", 50),
                               base_color="black", hovering_color="red")
-
-        for selection in [bw_button, br_button]:
+        bb_button = Button(button_face, pos=(400, 600), text_input = "Black/Blue Board",
+                              font=pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        
+        for selection in [br_button, bw_button, bg_button, bb_button]:
             selection.color_change(opt_mouse_pos)
             selection.update(WIN)
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if bw_button.user_input(opt_mouse_pos):
-                    play(mode = 0, color1 = BLACK, color2 = WHITE)
                 if br_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
                     play(mode = 0, color1 = BLACK, color2 = RED)
+                    # color1 = BLACK
+                    # color2 = WHITE
+                    # main_menu()
+                    # return color1, color2
+                if bw_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 0, color1 = BLACK, color2 = WHITE)
+                    # color1 = BLACK
+                    # color2 = WHITE
+                    # main_menu()
+                    # return color1, color2
+                if bg_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 0, color1 = BLACK, color2 = GREY)
+                    # color1 = BLACK
+                    # color2 = RED
+                    # main_menu()
+                    # return color1, color2
+                if bb_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
+                    play(mode = 0, color1 = BLACK, color2 = BLUE)
+                    # color1 = BLACK
+                    # color2 = RED
+                    # main_menu()
+                    # return color1, color2
+
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 sys.exit()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+                    back_click_fx.play()
                     main_menu()
 
         pygame.display.update()
 ##############################################################################
+FPS = 60
+pygame.init()
+mixer.init()
+pygame.mixer.music.load('sounds/main_game2.mp3')
+pygame.mixer.music.play(-1, 0.0)
+pygame.mixer.music.set_volume(0.10)
+button_click_fx = pygame.mixer.Sound("sounds/button_click.wav")
+button_click_fx.set_volume(0.75)
+back_click_fx = pygame.mixer.Sound("sounds/back_to_menu.wav")
+back_click_fx.set_volume(0.75)
+win_fx = pygame.mixer.Sound("sounds/victory.wav")
+win_fx.set_volume(0.75)
+end_fx = pygame.mixer.Sound("sounds/times_up.wav")
+end_fx.set_volume(0.75)
+WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 main_menu()

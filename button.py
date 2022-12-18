@@ -4,15 +4,6 @@ Created on Mon Dec 12 11:04:22 2022
 
 @author: trecr
 """
-import pygame
-import sys
-from constants import WIDTH, HEIGHT
-
-# pygame.init()
-# screen = pygame.display.set_mode((WIDTH, HEIGHT))
-# pygame.display.set_caption("PLAY")
-# pygame.font.SysFont("couriernew", 50)
-
 class Button():
     def __init__(self, image, pos, text_input, font, base_color, hovering_color):
         self.x = pos[0]
@@ -43,22 +34,3 @@ class Button():
             self.text = self.font.render(self.text_input, True, self.hovering_color)
         else:
             self.text = self.font.render(self.text_input, True, self.base_color)
-
-## The code below was ran to test the functionality of the class             
-# button_face = pygame.image.load("button.jpg")
-# button_face = pygame.transform.scale(button_face, (400, 150))
-
-# play_button = Button(button_face, 400, 150, "PLAY")
-
-# while True:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             pygame.quit()
-#             sys.exit()
-#         if event.type == pygame.MOUSEBUTTONDOWN:
-#             play_button.user_input(pygame.mouse.get_pos())
-            
-#     screen.fill("black")
-#     play_button.update()
-#     play_button.color_change(pygame.mouse.get_pos())
-#     pygame.display.update()
