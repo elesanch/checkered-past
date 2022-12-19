@@ -413,21 +413,14 @@ def game_mode(inp1, inp2):
                 if instr_button.user_input(mode_mouse_pos):
                     button_click_fx.play()
                     play(mode = 1, color1 = inp1, color2 = inp2)
-                    
-                    # if board_selection() != None:
-                    #     play(mode = 1, color1 = board_selection()[0], color2 = board_selection()[1])
-                    # else:
-                    #     play(mode = 1, color1 = BLACK, color2 = RED)
+    
                 if norm_button.user_input(mode_mouse_pos):
                     button_click_fx.play()
                     play(mode = 0, color1 = BLACK, color2 = RED)
-                    # if board_selection() != None:
-                    #     play(mode = 0, color1 = board_selection()[0], color2 = board_selection()[1])
-                    # else:
-                    #     play(mode = 0, color1 = BLACK, color2 = RED)  
+
                 if timed_button.user_input(mode_mouse_pos):
                     button_click_fx.play()
-                    timer_selection()
+                    timer_selection(inp1, inp2)
 
             if event.type == pygame.QUIT:
                 run = False
@@ -441,7 +434,7 @@ def game_mode(inp1, inp2):
 
         pygame.display.update()
 
-def timer_selection():
+def timer_selection(inp1, inp2):
     pygame.display.set_caption('Timer Selection - Press Space Bar for Main Menu')
     run = True
     clock = pygame.time.Clock()
@@ -473,16 +466,16 @@ def timer_selection():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if min_button.user_input(timed_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 2, color1 = BLACK, color2 = RED)
+                    play(mode = 2, color1 = inp1, color2 = inp2)
                 if two_min_button.user_input(timed_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 3, color1 = BLACK, color2 = RED)
+                    play(mode = 3, color1 = inp1, color2 = inp2)
                 if five_min_button.user_input(timed_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 4, color1 = BLACK, color2 = RED)
+                    play(mode = 4, color1 = inp1, color2 = inp2)
                 if ten_min_button.user_input(timed_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 5, color1 = BLACK, color2 = RED)
+                    play(mode = 5, color1 = inp1, color2 = inp2)
 
             if event.type == pygame.QUIT:
                 run = False
