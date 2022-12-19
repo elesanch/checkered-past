@@ -22,7 +22,7 @@ X
 
 ## How to Use
 
-All you need is a python3 IDE and/or interpreter. No additional software or hardware requirements need to be considered to run this program. Upon downloading this repository, make sure to unzip the 'sounds' folder contained. After that, just run main.py file and the game is ready to be played! If there are any quuestions on the game itself, feel free to check out the instructions under the 'options' tab. 
+All you need is a python3 IDE and/or interpreter. Ensure the pygame module is properly downloaded on your device as well. No additional software or hardware requirements need to be considered to run this program. Upon downloading this repository, make sure to unzip the 'sounds' folder contained. After that, just run main.py file and the game is ready to be played! If there are any quuestions on the game itself, feel free to check out the instructions under the 'options' tab. 
 
 ## Inputs/Outputs
 
@@ -33,5 +33,5 @@ X
  - Colin Yancey (Instructor)
  - Anastasia Georgiou (Instructor)
  - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
+ - [Checkers Rules](https://www.youtube.com/watch?v=ScKIdStgAfU)
  - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
