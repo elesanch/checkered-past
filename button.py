@@ -57,7 +57,8 @@ class Button():
             Showing True or False if the user has clicked on the button.
 
         '''
-        if pos[0] in range(self.rect.left, self.rect.right) and pos[1] in range(self.rect.top, self.rect.bottom):
+        if (pos[0] in range(self.rect.left, self.rect.right)
+            and pos[1] in range(self.rect.top, self.rect.bottom)):
             return True
         return False
 
@@ -76,7 +77,8 @@ class Button():
         None.
 
         '''
-        if pos[0] in range(self.rect.left, self.rect.right) and pos[1] in range(self.rect.top, self.rect.bottom):
+        if (pos[0] in range(self.rect.left, self.rect.right)
+            and pos[1] in range(self.rect.top, self.rect.bottom)):
             self.text = self.font.render(self.text_input, True, self.hovering_color)
         else:
             self.text = self.font.render(self.text_input, True, self.base_color)
