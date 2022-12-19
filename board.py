@@ -5,7 +5,7 @@ Created on Tue Dec  6 15:01:32 2022
 
 This file contains all information in relation to the Board in a checkers game.
 
-@author: elenasanchez
+@author: elenasanchez & trecr
 """
 import pygame
 from pygame import mixer
