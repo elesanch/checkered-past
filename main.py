@@ -60,7 +60,7 @@ def main_menu():
                     instructions()
                 if mode_button.user_input(menu_mouse_pos):
                     button_click_fx.play()
-                    game_mode()
+                    game_mode(BLACK, RED)
                 if options_button.user_input(menu_mouse_pos):
                     button_click_fx.play()
                     options()
@@ -382,13 +382,13 @@ def play(mode, color1, color2):
 
     pygame.quit()
 
-def game_mode():
+def game_mode(inp1, inp2):
     pygame.display.set_caption('Game Mode - Press Space Bar for Main Menu')
     run = True
     clock = pygame.time.Clock()
     button_face = pygame.image.load("button.jpg")
     button_face = pygame.transform.scale(button_face, (600, 150))
-    
+
     while run:
         clock.tick(FPS)
         WIN.fill("black")
@@ -412,7 +412,8 @@ def game_mode():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if instr_button.user_input(mode_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 1, color1 = BLACK, color2 = RED)
+                    play(mode = 1, color1 = inp1, color2 = inp2)
+                    
                     # if board_selection() != None:
                     #     play(mode = 1, color1 = board_selection()[0], color2 = board_selection()[1])
                     # else:
@@ -578,32 +579,19 @@ def board_selection():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if br_button.user_input(opt_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 0, color1 = BLACK, color2 = RED)
-                    # color1 = BLACK
-                    # color2 = WHITE
-                    # main_menu()
-                    # return color1, color2
+                    game_mode(BLACK, RED)
+                    
                 if bw_button.user_input(opt_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 0, color1 = BLACK, color2 = WHITE)
-                    # color1 = BLACK
-                    # color2 = WHITE
-                    # main_menu()
-                    # return color1, color2
+                    game_mode(BLACK, WHITE)
+                    
                 if bg_button.user_input(opt_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 0, color1 = BLACK, color2 = GREY)
-                    # color1 = BLACK
-                    # color2 = RED
-                    # main_menu()
-                    # return color1, color2
+                    game_mode(BLACK, GREY)
+                    
                 if bb_button.user_input(opt_mouse_pos):
                     button_click_fx.play()
-                    play(mode = 0, color1 = BLACK, color2 = BLUE)
-                    # color1 = BLACK
-                    # color2 = RED
-                    # main_menu()
-                    # return color1, color2
+                    game_mode(BLACK, BLUE)
 
             if event.type == pygame.QUIT:
                 run = False
@@ -616,6 +604,7 @@ def board_selection():
                     main_menu()
 
         pygame.display.update()
+
 ##############################################################################
 FPS = 60
 pygame.init()
