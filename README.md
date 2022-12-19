@@ -32,6 +32,7 @@ X
 
  - Colin Yancey (Instructor)
  - Anastasia Georgiou (Instructor)
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
  - [Checkers Rules](https://www.youtube.com/watch?v=ScKIdStgAfU)
+ - [Python Chckers Board Generation] (https://www.youtube.com/watch?v=vnd3RfeG3NM)
+ - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
  - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
