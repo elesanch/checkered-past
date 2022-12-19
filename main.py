@@ -646,14 +646,17 @@ def options():
         clock.tick(FPS)
         WIN.fill("black")
         opt_mouse_pos = pygame.mouse.get_pos()
-        music_button = Button(button_face, pos=(400, 300), text_input = "MUSIC VOLUME",
+        music_button = Button(button_face, pos=(400, 200), text_input = "MUSIC VOLUME",
                               font=pygame.font.SysFont("couriernew", 50),
                               base_color="black", hovering_color="red")
-        board_button = Button(button_face, pos=(400, 500), text_input = "BOARD COLOR",
+        board_button = Button(button_face, pos=(400, 400), text_input = "BOARD COLOR",
+                              font=pygame.font.SysFont("couriernew", 50),
+                              base_color="black", hovering_color="red")
+        instruc_button = Button(button_face, pos=(400, 600), text_input = "INSTRUCTIONS",
                               font=pygame.font.SysFont("couriernew", 50),
                               base_color="black", hovering_color="red")
 
-        for selection in [music_button, board_button]:
+        for selection in [music_button, board_button, instruc_button]:
             selection.color_change(opt_mouse_pos)
             selection.update(WIN)
 
@@ -663,8 +666,13 @@ def options():
                     button_click_fx.play()
                     board_selection()
 
-                if board_button.user_input(opt_mouse_pos):
+                if music_button.user_input(opt_mouse_pos):
                     button_click_fx.play()
+                    # need to define music function/screen
+                    
+                if instruc_button.user_input(opt_mouse_pos):
+                    button_click_fx.play()
+                    instructions()
                     # need to define music function/screen
 
             if event.type == pygame.QUIT:
