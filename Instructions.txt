@@ -11,3 +11,4 @@ Rules:
 6. RED Starts - Players decide who gets to be RED
 
 Press RETURN/ENTER to start the game
+Or press SPACE to go back to the main menu
