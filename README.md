@@ -77,15 +77,15 @@ of different sounds to different actions.
 The checkers game functionality is handled similarly to game customization. As 
 in real-life checkers, pieces are taken off the board whenever they are jumped 
 by an oppoent and pieces cannot be moved to square where a piece already resides.
-With standard chess rules in mind (see acknoqledgement) lists of pieces were 
-updated continously to track the movement and presence of the pieces on the board. 
-Movement, capturesm and the board were visually handled using pygame's draw
+With standard checkers rules in mind (see acknowledgement), python lists of pieces were 
+updated continously to track the movement and presence of the pieces on the digital board. 
+Movement, captures and the board were visually handled using pygame's draw
 functionality. Kings were also accounted for in this digital checkers game by 
 superimposing an image of a crown onto pieces that achieved the "edge" locations 
 of the board. The use of images was critical not only to the creation of king pieces, 
 but also many of the other interactive objects in the game including buttons, timers, 
-and user messages (pygame is image-reliant). Finally, once a user's list of pieces 
-was empty, the program wass configured to acknowledge a winner which is simply 
+and user-messages (pygame is image-reliant). Finally, once a user's list of pieces 
+was empty, the program was configured to acknowledge a winner which is simply 
 the user who still has pieces present in their list. 
 
 Successful completion of the game will result in a winner message that pops up 
