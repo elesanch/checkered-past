@@ -5,7 +5,7 @@ Created on Tue Dec  6 14:07:02 2022
 
 This is the main file for the checkers game. This fule contains all information
 on the user interface (UI) design of this game. The file encompasses, the
-differentscreens, modes of play, board and music options as well as exit
+different screens, modes of play, board and music options as well as exit
 possibilities.
 
 @author: elenasanchez & trecr
