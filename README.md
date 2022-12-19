@@ -1,6 +1,6 @@
 # Checkered-past!
 
-Descroption
+Description
 
 ## Authors
 
